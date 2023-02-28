@@ -40,8 +40,10 @@ python3 -m venv "$VIRTUAL_DIR"
 # Install requirements and setup.py
 source "$VIRTUAL_DIR/bin/activate"
 cd ./s2orc-doc2json
-pip3 install -r ./requirements.txt
-python3 ./setup.py develop
+cout "Installing Python dependencies"
+pip3 install --quiet --ignore-installed --requirement ./requirements.txt
+python3 ./setup.py develop 2>&1 >/dev/null
+cd - 2>&1 >/dev/null
 
 cout "Open up another shell and:"
 cmd "cd $HOME/Squirtle/s2orc-doc2json/scripts"
