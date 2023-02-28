@@ -8,7 +8,6 @@ VIRTUAL_DIR="$HOME/.virtualenvs/s2orc-doc2json"
 source ./colors.sh
 
 warn() {
-	#cout >&2 "$SCRIPTNAME: $*"
 	cerr "$SCRIPTNAME: $*"
 }
 
@@ -31,7 +30,7 @@ checkdeps() {
 	fi
 }
 
-cout "Preparing environment for doc2json"
+cout "Checking if python3 and pip3 are installed"
 checkdeps "${REQUIRED_CMDS[@]}"
 
 # Create virtual environemnt dir if not exist
@@ -46,7 +45,7 @@ python3 ./setup.py develop 2>&1 >/dev/null
 cd - 2>&1 >/dev/null
 
 cout "Open up another shell and:"
-cmd "cd $HOME/Squirtle/s2orc-doc2json/scripts"
+cmd "cd $PWD/s2orc-doc2json/scripts"
 cout "If running grobid for the first time:"
 cmd "bash ./setup_grobid.sh"
 cout "else:"
