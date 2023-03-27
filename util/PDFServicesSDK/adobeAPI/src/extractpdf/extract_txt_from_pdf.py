@@ -23,7 +23,7 @@ logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
 try:
     # get base path.
-    base_path = os.path.dirname(os.path.abspath(__file__))
+    base_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
     # Initial setup, create credentials instance.
     credentials = Credentials.service_account_credentials_builder() \
@@ -35,7 +35,7 @@ try:
     extract_pdf_operation = ExtractPDFOperation.create_new()
 
     # Set operation input from a source file.
-    source = FileRef.create_from_local_file(base_path + "resources/2020.acl-main.207.pdf")
+    source = FileRef.create_from_local_file(base_path + "/resources/extractPdfInput.pdf")
     extract_pdf_operation.set_input(source)
 
     # Build ExtractPDF options and set them into the operation
@@ -45,9 +45,9 @@ try:
     extract_pdf_operation.set_options(extract_pdf_options)
 
     # Execute the operation.
-    result = extract_pdf_operation.execute(execution_context)
+    result: FileRef = extract_pdf_operation.execute(execution_context)
 
     # Save the result to the specified location.
-    print(result)
+    result.save_as(base_path + "/output/ExtractTextInfoFromPDF.zip")
 except (ServiceApiException, ServiceUsageException, SdkException):
     logging.exception("Exception encountered while executing operation")
