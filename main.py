@@ -1,4 +1,4 @@
-from flask import Flask, render_template, json, jsonify
+from flask import Flask, render_template, json, jsonify, render_template_string
 from flask_socketio import SocketIO
 from flask_wtf import FlaskForm
 from wtforms import FileField, SubmitField
@@ -8,6 +8,8 @@ from wtforms.validators import InputRequired
 import io
 import zipfile
 from util.PDFServicesSDK.adobeAPI.src.extractpdf.extract_txt_table_info_with_figure_tables_rendition_from_pdf import ExtractAPI
+from util.json2html.Json_converter import jsontohtml
+
 
 app = Flask(__name__)
 socketio = SocketIO(app)
@@ -49,15 +51,12 @@ def home():
 
         os.remove(result_zip)
 
-        with open(f"{app.config['UPLOAD_FOLDER']}/structuredData.json", 'r') as myfile:
-            data = json.loads((myfile.read()))
-        
-        text_dump = ""
-        for t in data.get('elements'):
-            text_dump += t.get('Text', '<IMAGE/TABLE>')
-            text_dump += '\n'
-       
-        return render_template('success.html',  title="page", jsonfile=text_dump)
+        jsonobj = jsontohtml(app.config['UPLOAD_FOLDER'] + "/structuredData.json")
+        html = jsonobj.json2html()
+
+    
+
+        return render_template_string(html)
     return render_template('index.html', form=form)
 
 if __name__ == '__main__':
