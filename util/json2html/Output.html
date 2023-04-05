@@ -1,8 +1,46 @@
 <html>
 <head>
 <title>Output HTML File</title>
+<link rel="preconnect" href="https://fonts.googleapis.com/%22%3E/n<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+@import url(https://fonts.googleapis.com/css2?family=Noto+Serif&family=Roboto:wght@300;400&family=VT323&display=swap);
+html {
+font-family: "Noto Serif", serif;
+}
+br {
+display: block;
+margin: 4% 0;
+content: "";
+}
+a {
+color: #1857b6;
+transition: color .25s ease-out;
+font-size: 1.15rem;
+}
+a:hover {
+color: #11223d;
+text-decoration: none
+}
+h1,h2 {
+color: #11223d;
+}
+p {
+font-size: 1.5rem;
+}
+h2 {
+font-size: 2rem;
+}
+hr {
+color: #11223d;
+height: 0.15%;
+background-color: #11223d;
+width: 100%;
+}
+</style>
 </head> 
-<body>  
+<body style="display: flex;">
+<div style="min-width: 15%; max-width: 15%; margin: 0 2%; overflow: auto;">
 <h1>Table of contents</h1>
 <a href="#SPECTER: Document-level Representation Learning using Citation-informed Transformers">SPECTER: Document-level Representation Learning using Citation-informed Transformers</a>
  <br>
@@ -46,7 +84,8 @@
  <br>
 <a href="#A Appendix A -Baseline Details">A Appendix A -Baseline Details</a>
  <br>
-<div id="SPECTER: Document-level Representation Learning using Citation-informed Transformers">
+</div>
+<div style="overflow: auto; height: auto; border-left: solid; padding-left: 2%; padding-right: 2%"><div id="SPECTER: Document-level Representation Learning using Citation-informed Transformers">
 <h2>SPECTER: Document-level Representation Learning using Citation-informed Transformers</h2>
   <p></p>
 </div>
@@ -130,5 +169,5 @@
 <h2>A Appendix A -Baseline Details</h2>
   <p>9. Sentence BERT Sentence BERT ((<>)Reimers and (<>)Gurevych, (<>)2019) is a general-domain pretrained model aimed at embedding sentences. The authors fine-tuned BERT using a triplet loss, where positive sentences were from the same document section as the seed sentence, and distractor sentences came from other document sections. The model is designed to encode sentences as opposed to paragraphs, so we embed the title and each sentence in the abstract separately, sum the embeddings, and L2 normalize the result to produce a final 768-dimensional paper embedding.18 (<>)During hyperparameter optimization we chose how to compute TF and IDF values weights by taking the following non-redundant combinations of scikit-learn’s TfidfVectorizer ((<>)Pedregosa et al., (<>)2011) parameters: sublinear_tf, binary, use_idf, smooth_idf. There were a total of 9 parameter combinations. The IDF values were estimated on the training set. The other parameters were set as follows: min_df=3, max_df=0.75, strip_accents=’ascii’, stop_words=’english’, norm=None, lowercase=True. For training of fasttext, we used all default parameters with the exception of setting dimension to 300 and minCount was set to 25 due to the large corpus. </p>
 </div>
-</body>
+</div></body>
 </html>
