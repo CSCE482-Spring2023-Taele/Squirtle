@@ -12,9 +12,12 @@ class jsontohtml:
 
         # length of total text elements
         x = len(pdf["elements"])
-        section = pdf["elements"][0]["Text"]
-        section = section[:-1]
-        structured[section] = ""
+        if "Text" in pdf["elements"][0]:
+            section = pdf["elements"][0]["Text"]
+            section = section[:-1]
+            structured[section] = ""
+        else:
+            section = ""
 
         # looping through text elements
         for i in range(x-1):
@@ -24,6 +27,9 @@ class jsontohtml:
                     section = section[:-1]
                 if pdf["elements"][i]["Path"].find("Document/P") != -1:
                     structured[section] = structured.get(section, "") + pdf["elements"][i]["Text"]
+                if pdf["elements"][i]["Path"].find("Document/Title") != -1:
+                    section = pdf["elements"][i]["Text"]
+                    structured[section] = ""
 
         f.close()
         html = '''<html>
