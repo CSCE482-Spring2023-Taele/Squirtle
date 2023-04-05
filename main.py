@@ -1,5 +1,4 @@
 from flask import Flask, render_template, json, jsonify, render_template_string
-from flask_socketio import SocketIO
 from flask_wtf import FlaskForm
 from wtforms import FileField, SubmitField
 from werkzeug.utils import secure_filename
@@ -7,29 +6,14 @@ import os, shutil
 from wtforms.validators import InputRequired
 import io
 import zipfile
+import tempfile
 from util.PDFServicesSDK.adobeAPI.src.extractpdf.extract_txt_table_info_with_figure_tables_rendition_from_pdf import ExtractAPI
 from util.json2html.Json_converter import jsontohtml
 
 
 app = Flask(__name__)
-socketio = SocketIO(app)
 app.config['SECRET_KEY'] = 'supersecretkey'
-app.config['UPLOAD_FOLDER'] = 'static/files'
-
-@socketio.on('connect')
-def test_connect():
-    print('Client connected')
-
-@socketio.on('disconnect')
-def test_disconnect():
-    print('Clearing Resources...')
-    for files in os.listdir(app.config['UPLOAD_FOLDER']):
-            path = os.path.join(app.config['UPLOAD_FOLDER'], files)
-            try:
-                shutil.rmtree(path)
-            except OSError:
-                os.remove(path)
-    print('Client disconnected')
+app.config['UPLOAD_FOLDER'] = tempfile.gettempdir() + '/'
 
 class UploadFileForm(FlaskForm):
     file = FileField("File", validators=[InputRequired()])
@@ -54,10 +38,16 @@ def home():
         jsonobj = jsontohtml(app.config['UPLOAD_FOLDER'] + "/structuredData.json")
         html = jsonobj.json2html()
 
-    
+        for files in os.listdir(app.config['UPLOAD_FOLDER']):
+            path = os.path.join(app.config['UPLOAD_FOLDER'], files)
+            try:
+                shutil.rmtree(path)
+            except OSError:
+                os.remove(path)
 
         return render_template_string(html)
+
     return render_template('index.html', form=form)
 
 if __name__ == '__main__':
-    socketio.run(app)
+    app.run(debug=True)
