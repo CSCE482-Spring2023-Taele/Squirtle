@@ -13,7 +13,7 @@ from util.json2html.Json_converter import jsontohtml
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'supersecretkey'
-app.config['UPLOAD_FOLDER'] = 'static/files'
+app.config['UPLOAD_FOLDER'] = tempfile.gettempdir() + '/'
 
 class UploadFileForm(FlaskForm):
     file = FileField("File", validators=[InputRequired()])
