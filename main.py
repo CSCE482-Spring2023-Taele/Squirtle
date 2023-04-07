@@ -1,6 +1,6 @@
 from flask import Flask, render_template, json, jsonify, render_template_string
 from flask_wtf import FlaskForm
-from wtforms import FileField, SubmitField
+from wtforms import FileField, SubmitField, BooleanField
 from werkzeug.utils import secure_filename
 import os, shutil
 from wtforms.validators import InputRequired
@@ -13,11 +13,12 @@ from util.json2html.Json_converter import jsontohtml
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'supersecretkey'
-app.config['UPLOAD_FOLDER'] = tempfile.gettempdir() + '/'
+app.config['UPLOAD_FOLDER'] = 'static/files'
 
 class UploadFileForm(FlaskForm):
     file = FileField("File", validators=[InputRequired()])
     submit = SubmitField("Upload File")
+    remove_citations_toggle = BooleanField("Remove In-text Citations")
 
 @app.route('/', methods=['GET',"POST"])
 @app.route('/home', methods=['GET',"POST"])
@@ -25,6 +26,7 @@ def home():
     form = UploadFileForm()
     if form.validate_on_submit():
         file = form.file.data
+        remove_citations = form.remove_citations_toggle.data
         buf_stream = io.BufferedReader(file)
         extract = ExtractAPI(file.filename, buf_stream)
         result_zip = extract.adobe_extract()
@@ -35,7 +37,7 @@ def home():
 
         os.remove(result_zip)
 
-        jsonobj = jsontohtml(app.config['UPLOAD_FOLDER'] + "/structuredData.json")
+        jsonobj = jsontohtml(app.config['UPLOAD_FOLDER'] + "/structuredData.json", remove_citations)
         html = jsonobj.json2html()
 
         for files in os.listdir(app.config['UPLOAD_FOLDER']):

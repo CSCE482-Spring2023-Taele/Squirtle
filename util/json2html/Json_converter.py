@@ -1,6 +1,7 @@
 class jsontohtml:
-    def __init__(self, json_filename):
+    def __init__(self, json_filename, remove_citations):
         self.filename = json_filename
+        self.citation_flag = remove_citations
 
     def json2html(self):
         import json
@@ -54,11 +55,13 @@ class jsontohtml:
         html = html + """</body>
         </html>"""
 
+        if not self.citation_flag:
+            return html
         return self.classify_citations(html)
     
     def classify_citations(self,text):
         import re
-        print(text)
+        print('Removing Citations')
         citation_indexes = [m.start() for m in re.finditer('\(<>\)', text)]
         starting_index = -1
         ending_index = -1
@@ -72,5 +75,4 @@ class jsontohtml:
         for citation in citations:
             normalized_citation = '<!--' + citation + '-->'
             text = text.replace(citation, normalized_citation)
-        print(text)
         return text
