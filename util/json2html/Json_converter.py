@@ -1,7 +1,8 @@
 class jsontohtml:
-    def __init__(self, json_filename, remove_citations):
+    def __init__(self, json_filename, remove_citations, sonify_images):
         self.filename = json_filename
         self.citation_flag = remove_citations
+        self.sonify_flag = sonify_images
 
     def json2html(self):
         import json
@@ -31,10 +32,18 @@ class jsontohtml:
                 if pdf["elements"][i]["Path"].find("Document/Title") != -1:
                     section = pdf["elements"][i]["Text"]
                     structured[section] = ""
+                
+
 
         f.close()
         html = '''<html>
         <head>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+        <script>
+            window.onbeforeunload = function () {
+                socket.emit('disconnect');
+            }
+        </script>
         <title>Output HTML File</title>
         <link rel="preconnect" href="https://fonts.googleapis.com/%22%3E/n<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>\n<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">\n<style>\n@import url(https://fonts.googleapis.com/css2?family=Noto+Serif&family=Roboto:wght@300;400&family=VT323&display=swap);\nhtml {\nfont-family: "Noto Serif", serif;\n}\nbr {\ndisplay: block;\nmargin: 4% 0;\ncontent: "";\n}\na {\ncolor: #1857b6;\ntransition: color .25s ease-out;\nfont-size: 1.15rem;\n}\na:hover {\ncolor: #11223d;\ntext-decoration: none\n}\nh1,h2 {\ncolor: #11223d;\n}\np {\nfont-size: 1.5rem;\n}\nh2 {\nfont-size: 2rem;\n}\nhr {\ncolor: #11223d;\nheight: 0.15%;\nbackground-color: #11223d;\nwidth: 100%;\n}\n</style>
         </head> 
@@ -42,6 +51,8 @@ class jsontohtml:
         <div style="min-width: 15%; max-width: 15%; margin: 0 2%; overflow: auto;">
         <h1>Table of contents</h1>
         '''
+
+        print('Structured: ', structured)
 
         for i in structured:
             html = html + "<a href=\"#" + i + "\">" + i + "</a>\n <br>\n"
