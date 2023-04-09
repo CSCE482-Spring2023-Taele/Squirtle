@@ -107,3 +107,4 @@ class Sonify:
         print("\nProgress: ==> 100%")
         if verbose:
             print("Output: ", output)
+
