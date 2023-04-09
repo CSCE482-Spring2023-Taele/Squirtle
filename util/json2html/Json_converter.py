@@ -43,6 +43,9 @@ class jsontohtml:
             window.onbeforeunload = function () {
                 socket.emit('disconnect');
             }
+            var socket = io();
+                socket.on('connect', function() {
+            });
         </script>
         <title>Output HTML File</title>
         <link rel="preconnect" href="https://fonts.googleapis.com/%22%3E/n<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>\n<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">\n<style>\n@import url(https://fonts.googleapis.com/css2?family=Noto+Serif&family=Roboto:wght@300;400&family=VT323&display=swap);\nhtml {\nfont-family: "Noto Serif", serif;\n}\nbr {\ndisplay: block;\nmargin: 4% 0;\ncontent: "";\n}\na {\ncolor: #1857b6;\ntransition: color .25s ease-out;\nfont-size: 1.15rem;\n}\na:hover {\ncolor: #11223d;\ntext-decoration: none\n}\nh1,h2 {\ncolor: #11223d;\n}\np {\nfont-size: 1.5rem;\n}\nh2 {\nfont-size: 2rem;\n}\nhr {\ncolor: #11223d;\nheight: 0.15%;\nbackground-color: #11223d;\nwidth: 100%;\n}\n</style>
@@ -51,8 +54,6 @@ class jsontohtml:
         <div style="min-width: 15%; max-width: 15%; margin: 0 2%; overflow: auto;">
         <h1>Table of contents</h1>
         '''
-
-        print('Structured: ', structured)
 
         for i in structured:
             html = html + "<a href=\"#" + i + "\">" + i + "</a>\n <br>\n"

@@ -2,6 +2,7 @@ from flask import Flask, render_template, json, jsonify, render_template_string
 from flask_wtf import FlaskForm
 from flask_socketio import SocketIO
 from wtforms import FileField, SubmitField, BooleanField
+from flask_wtf.file import FileAllowed
 from werkzeug.utils import secure_filename
 import os, shutil
 from wtforms.validators import InputRequired
@@ -31,12 +32,11 @@ def test_disconnect():
                 shutil.rmtree(path)
             except OSError:
                 os.remove(path)
-    socketio.stop()
     print('Client disconnected')
 
 
 class UploadFileForm(FlaskForm):
-    file = FileField("File", validators=[InputRequired()])
+    file = FileField("File", validators=[InputRequired(), FileAllowed(['pdf'], "Wrong file format. Only PDFs allowed.")])
     submit = SubmitField("Upload File")
     remove_citations_toggle = BooleanField("Remove In-text Citations")
     sonify_images_toggle = BooleanField("Sonify Images")
@@ -60,18 +60,12 @@ def home():
         os.remove(result_zip)
 
         if sonify_images:
-            sonify = Sonify(app.config['UPLOAD_FOLDER'])
-            sonify.sonifyPDFImages()
+            if os.path.exists(app.config['UPLOAD_FOLDER'] + '/figures'):
+                sonify = Sonify(app.config['UPLOAD_FOLDER'])
+                sonify.sonifyPDFImages()
 
         jsonobj = jsontohtml(app.config['UPLOAD_FOLDER'] + "/structuredData.json", remove_citations, sonify_images)
         html = jsonobj.json2html()
-
-        """for files in os.listdir(app.config['UPLOAD_FOLDER']):
-            path = os.path.join(app.config['UPLOAD_FOLDER'], files)
-            try:
-                shutil.rmtree(path)
-            except OSError:
-                os.remove(path)"""
 
         return render_template_string(html)
 
@@ -79,4 +73,3 @@ def home():
 
 if __name__ == '__main__':
     socketio.run(app)
-    #app.run(debug=True)
