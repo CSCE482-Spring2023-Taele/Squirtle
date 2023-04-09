@@ -1,4 +1,4 @@
-bidict==0.22.1
+bidict==0.21.4
 build==0.9.0
 certifi==2022.12.7
 cffi==1.15.1
@@ -8,15 +8,18 @@ cryptography==3.4.6
 Flask==2.2.3
 Flask-SocketIO==5.3.3
 Flask-WTF==1.1.1
+gunicorn==20.1.0
 idna==3.4
 importlib-metadata==6.1.0
 itsdangerous==2.1.2
 Jinja2==3.1.2
 MarkupSafe==2.1.2
 multipart==0.2.4
+numpy==1.24.2
 packaging==21.3
 pdfservices-sdk==2.1.2
 pep517==0.13.0
+Pillow==9.5.0
 polling==0.3.2
 polling2==0.5.0
 pycparser==2.21
@@ -28,6 +31,7 @@ python-socketio==5.8.0
 PyYAML==6.0
 requests==2.27.1
 requests-toolbelt==0.10.1
+scipy==1.10.1
 six==1.16.0
 toml==0.10.2
 tomli==2.0.1
@@ -35,3 +39,6 @@ urllib3==1.26.13
 Werkzeug==2.2.3
 WTForms==3.0.1
 zipp==3.15.0
+h11==0.14.0
+simple-websocket==0.10.0
+wsproto==1.2.0
