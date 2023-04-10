@@ -13,8 +13,8 @@ from util.PDFServicesSDK.adobeAPI.src.extractpdf.extract_txt_table_info_with_fig
 from util.json2html.Json_converter import jsontohtml
 from util.soundscape import Sonify
 
-
-PORT=80
+# This port works on PythonAnywhere and should work locally
+PORT=4444
 
 app = Flask(__name__)
 socketio = SocketIO(app)
