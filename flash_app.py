@@ -14,6 +14,8 @@ from util.json2html.Json_converter import jsontohtml
 from util.soundscape import Sonify
 
 
+PORT=80
+
 app = Flask(__name__)
 socketio = SocketIO(app)
 app.config['SECRET_KEY'] = 'supersecretkey'
@@ -72,4 +74,4 @@ def home():
     return render_template('index.html', form=form)
 
 if __name__ == '__main__':
-    socketio.run(app)
+    socketio.run(app, port=PORT)
