@@ -61,8 +61,6 @@ class jsontohtml:
     
     def classify_citations(self,text):
         import re
-        print('Removing Citations')
-        # print(text)
         citation_indexes = [m.start() for m in re.finditer('\(<>\)', text)]
         starting_index = -1
         ending_index = -1
@@ -84,4 +82,6 @@ class jsontohtml:
         for citation in citations:
             normalized_citation = '<!--' + citation + '-->'
             text = text.replace(citation, normalized_citation)
+        print(len(citations))
+        print(text)
         return text
