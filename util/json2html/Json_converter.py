@@ -1,3 +1,8 @@
+import re
+import json
+from prettytable import PrettyTable
+from xlsx2html import xlsx2html
+
 class jsontohtml:
     def __init__(self, foldername, remove_citations, sonify_images):
         self.directory = foldername
@@ -6,7 +11,6 @@ class jsontohtml:
         self.sonify_flag = sonify_images
 
     def json2html(self):
-        import json
         file = self.filename
         f = open(file,)
         pdf = json.load(f)
@@ -35,6 +39,8 @@ class jsontohtml:
                     structured[section] = ""
             if pdf["elements"][i]["Path"].find("Figure") != -1:
                 structured[pdf["elements"][i]["filePaths"][0]] = ""
+            if pdf["elements"][i]["Path"].find("Table") != -1:
+                structured[pdf["elements"][i].get("filePaths",[""])[0]] = ""
                 
 
 
@@ -59,7 +65,7 @@ class jsontohtml:
         '''
 
         for i in structured:
-            if i.find("figures/fileoutpart") == -1:
+            if (i.find("figures/fileoutpart") == -1) and (i.find("tables/fileoutpart") == -1):
                 html = html + "<a href=\"#" + i + "\">" + i + "</a>\n <br>\n"
         html = html + "</div>\n" + "<div style=\"overflow: auto; height: auto; border-left: solid; padding-left: 2%; padding-right: 2%\">"
 
@@ -71,7 +77,14 @@ class jsontohtml:
                 if self.sonify_flag:
                     soundpath = imagepath[:-3] + "wav"
                     html = html + "<audio controls>\n" + "<source src=\"" + soundpath + "\" type=\"audio/wav\" >\n" + "</audio>"
-                html = html + "</div>\n"
+                html = html + "</div>\n" + "<br>"
+            elif i.find("tables/fileoutpart") != -1:
+                tablepath = self.directory + "/" + i
+                out_stream = xlsx2html(tablepath)
+                out_stream.seek(0)
+                html = html + "<div id=\"" + i + "\">\n"
+                html = html + out_stream.read().replace('_x000D_', "")
+                html = html + "</div>\n" + "<br>"
             else:
                 html = html + "<div id=\"" + i + "\">\n"
                 html = html + "<h2>" + i + "</h2>\n  <p>" + structured[i] + "</p>\n"
@@ -85,7 +98,6 @@ class jsontohtml:
         return self.classify_citations(html)
     
     def classify_citations(self,text):
-        import re
         print('Removing Citations')
         citation_indexes = [m.start() for m in re.finditer('\(<>\)', text)]
         starting_index = -1

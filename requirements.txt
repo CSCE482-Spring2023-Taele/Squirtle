@@ -22,6 +22,7 @@ pep517==0.13.0
 Pillow==9.5.0
 polling==0.3.2
 polling2==0.5.0
+PrettyTable==3.6.0
 pycparser==2.21
 Pygments==2.14.0
 PyJWT==2.4.0
@@ -36,9 +37,14 @@ six==1.16.0
 toml==0.10.2
 tomli==2.0.1
 urllib3==1.26.13
+wcwidth==0.2.6
 Werkzeug==2.2.3
 WTForms==3.0.1
 zipp==3.15.0
 h11==0.14.0
 simple-websocket==0.10.0
 wsproto==1.2.0
+babel==2.12.1
+et-xmlfile==1.1.0
+openpyxl==3.1.2
+xlsx2html==0.4.2
