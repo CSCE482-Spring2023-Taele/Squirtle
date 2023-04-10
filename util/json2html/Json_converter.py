@@ -1,6 +1,7 @@
 class jsontohtml:
-    def __init__(self, json_filename, remove_citations, sonify_images):
-        self.filename = json_filename
+    def __init__(self, foldername, remove_citations, sonify_images):
+        self.directory = foldername
+        self.filename = foldername + "/structuredData.json"
         self.citation_flag = remove_citations
         self.sonify_flag = sonify_images
 
@@ -32,6 +33,8 @@ class jsontohtml:
                 if pdf["elements"][i]["Path"].find("Document/Title") != -1:
                     section = pdf["elements"][i]["Text"]
                     structured[section] = ""
+            if pdf["elements"][i]["Path"].find("Figure") != -1:
+                structured[pdf["elements"][i]["filePaths"][0]] = ""
                 
 
 
@@ -56,13 +59,23 @@ class jsontohtml:
         '''
 
         for i in structured:
-            html = html + "<a href=\"#" + i + "\">" + i + "</a>\n <br>\n"
+            if i.find("figures/fileoutpart") == -1:
+                html = html + "<a href=\"#" + i + "\">" + i + "</a>\n <br>\n"
         html = html + "</div>\n" + "<div style=\"overflow: auto; height: auto; border-left: solid; padding-left: 2%; padding-right: 2%\">"
 
         for i in structured:
-            html = html + "<div id=\"" + i + "\">\n"
-            html = html + "<h2>" + i + "</h2>\n  <p>" + structured[i] + "</p>\n"
-            html = html + "</div>\n"
+            if i.find("figures/fileoutpart") != -1:
+                html = html + "<div id=\"" + i + "\">\n"
+                imagepath = self.directory + "/" + i
+                html = html + "<img src=\"" + imagepath + "\" alt=\"\" >\n"
+                if self.sonify_flag:
+                    soundpath = imagepath[:-3] + "wav"
+                    html = html + "<audio controls>\n" + "<source src=\"" + soundpath + "\" type=\"audio/wav\" >\n" + "</audio>"
+                html = html + "</div>\n"
+            else:
+                html = html + "<div id=\"" + i + "\">\n"
+                html = html + "<h2>" + i + "</h2>\n  <p>" + structured[i] + "</p>\n"
+                html = html + "</div>\n"
         html = html + "</div>"
         html = html + """</body>
         </html>"""

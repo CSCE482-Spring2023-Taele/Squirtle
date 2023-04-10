@@ -64,7 +64,7 @@ def home():
                 sonify = Sonify(app.config['UPLOAD_FOLDER'])
                 sonify.sonifyPDFImages()
 
-        jsonobj = jsontohtml(app.config['UPLOAD_FOLDER'] + "/structuredData.json", remove_citations, sonify_images)
+        jsonobj = jsontohtml(app.config['UPLOAD_FOLDER'], remove_citations, sonify_images)
         html = jsonobj.json2html()
 
         return render_template_string(html)
