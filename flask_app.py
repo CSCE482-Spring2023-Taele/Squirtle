@@ -11,7 +11,7 @@ from util.PDFServicesSDK.adobeAPI.src.extractpdf.extract_txt_table_info_with_fig
 from util.json2html.Json_converter import jsontohtml
 
 
-PORT=80
+PORT=4444
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'supersecretkey'
