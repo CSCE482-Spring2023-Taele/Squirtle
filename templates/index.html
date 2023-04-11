@@ -13,6 +13,9 @@
         {{form.file()}}
         {{form.remove_citations_toggle()}}
         {{form.remove_citations_toggle.label}}
+        {{form.sonify_images_toggle()}}
+        {{form.sonify_images_toggle.label}}
+        {{''.join(form.file.errors)}}
         {{form.submit()}}
     </form>
 </body>
