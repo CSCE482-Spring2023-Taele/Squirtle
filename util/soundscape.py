@@ -12,8 +12,9 @@ class Sonify:
 
     def sonifyPDFImages(self):
         for files in os.listdir(self.input_dir):
-            path = os.path.join(self.input_dir, files)
-            self.genSoundFromImage(path, os.path.splitext(path)[0] + ".wav")
+            if files[:-3] != 'wav':
+                path = os.path.join(self.input_dir, files)
+                self.genSoundFromImage(path, os.path.splitext(path)[0] + ".wav")
 
 
     def loadPicture(self, size, file, contrast=True, highpass=False, verbose=1):
