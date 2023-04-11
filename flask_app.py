@@ -1,4 +1,4 @@
-from flask import Flask, render_template, json, jsonify, render_template_string
+from flask import Flask, render_template, json, jsonify, render_template_string, session
 from flask_wtf import FlaskForm
 from flask_socketio import SocketIO
 from wtforms import FileField, SubmitField, BooleanField
@@ -12,14 +12,13 @@ import tempfile
 from util.PDFServicesSDK.adobeAPI.src.extractpdf.extract_txt_table_info_with_figure_tables_rendition_from_pdf import ExtractAPI
 from util.json2html.Json_converter import jsontohtml
 from util.soundscape import Sonify
+import secrets
 
-# This port works on PythonAnywhere and should work locally
-PORT=4444
+
 
 app = Flask(__name__)
 socketio = SocketIO(app)
 app.config['SECRET_KEY'] = 'supersecretkey'
-app.config['UPLOAD_FOLDER'] = 'static/files'
 
 @socketio.on('connect')
 def test_connect():
@@ -27,13 +26,10 @@ def test_connect():
 
 @socketio.on('disconnect')
 def test_disconnect():
-    print('Clearing Resources...')
-    for files in os.listdir(app.config['UPLOAD_FOLDER']):
-            path = os.path.join(app.config['UPLOAD_FOLDER'], files)
-            try:
-                shutil.rmtree(path)
-            except OSError:
-                os.remove(path)
+    dir = session['UPLOAD_FOLDER']
+    print('Clearing Resources at ', dir)
+    shutil.rmtree(dir)
+    session.pop('UPLOAD_FOLDER', None)
     print('Client disconnected')
 
 
@@ -48,6 +44,9 @@ class UploadFileForm(FlaskForm):
 def home():
     form = UploadFileForm()
     if form.validate_on_submit():
+        secretStr = secrets.token_hex(16)
+        app.config['UPLOAD_FOLDER'] = secretStr
+        session['UPLOAD_FOLDER'] = os.getcwd() + '/' + secretStr
         file = form.file.data
         remove_citations = form.remove_citations_toggle.data
 
