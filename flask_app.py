@@ -45,7 +45,7 @@ def home():
     form = UploadFileForm()
     if form.validate_on_submit():
         secretStr = secrets.token_hex(16)
-        app.config['UPLOAD_FOLDER'] = secretStr
+        app.config['UPLOAD_FOLDER'] = 'static/' + secretStr
         session['UPLOAD_FOLDER'] = os.getcwd() + '/' + secretStr
         file = form.file.data
         remove_citations = form.remove_citations_toggle.data
