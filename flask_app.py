@@ -50,7 +50,9 @@ def home():
     if form.validate_on_submit():
         file = form.file.data
         remove_citations = form.remove_citations_toggle.data
+
         sonify_images = form.sonify_images_toggle.data
+
         buf_stream = io.BufferedReader(file)
         extract = ExtractAPI(file.filename, buf_stream)
         result_zip = extract.adobe_extract()
@@ -74,4 +76,5 @@ def home():
     return render_template('index.html', form=form)
 
 if __name__ == '__main__':
-    socketio.run(app, port=PORT)
+    socketio.run(app)
+
