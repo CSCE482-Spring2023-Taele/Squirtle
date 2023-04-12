@@ -13,12 +13,7 @@ class jsontohtml:
 
         # length of total text elements
         x = len(pdf["elements"])
-        if "Text" in pdf["elements"][0]:
-            section = pdf["elements"][0]["Text"]
-            section = section[:-1]
-            structured[section] = ""
-        else:
-            section = ""
+        section = ""
 
         # looping through text elements
         for i in range(x-1):
@@ -27,7 +22,7 @@ class jsontohtml:
                     section = pdf["elements"][i]["Text"]
                     section = section[:-1]
                 if pdf["elements"][i]["Path"].find("Document/P") != -1:
-                    structured[section] = structured.get(section, "") + pdf["elements"][i]["Text"]
+                    structured[section] = structured.get(section, "") + pdf["elements"][i]["Text"] + "<br><br>"
                 if pdf["elements"][i]["Path"].find("Document/Title") != -1:
                     section = pdf["elements"][i]["Text"]
                     structured[section] = ""
@@ -55,8 +50,9 @@ class jsontohtml:
         html = html + """</body>
         </html>"""
 
+        
         if not self.citation_flag:
-            return html
+            return html.replace("(<>)","")
         return self.classify_citations(html)
     
     def classify_citations(self,text):
@@ -82,6 +78,4 @@ class jsontohtml:
         for citation in citations:
             normalized_citation = '<!--' + citation + '-->'
             text = text.replace(citation, normalized_citation)
-        print(len(citations))
-        print(text)
         return text
