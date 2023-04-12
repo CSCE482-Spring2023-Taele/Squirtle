@@ -34,7 +34,7 @@ class ExtractAPI:
         try:
             # get base path.
             base_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-            write_path = tempfile.gettempdir()
+            #write_path = tempfile.gettempdir()
             # Initial setup, create credentials instance.
             credentials = Credentials.service_account_credentials_builder() \
                 .from_file(base_path + "/pdfservices-api-credentials.json") \
@@ -61,9 +61,9 @@ class ExtractAPI:
             result: FileRef = extract_pdf_operation.execute(execution_context)
 
             # Save the result to the specified location.
-            result.save_as(write_path + '/' + self.filename + ".zip")
+            result.save_as(base_path + '/' + self.filename + ".zip")
 
-            return write_path + '/' + self.filename + ".zip"
+            return base_path + '/' + self.filename + ".zip"
         
         except (ServiceApiException, ServiceUsageException, SdkException):
             logging.exception("Exception encountered while executing operation")
