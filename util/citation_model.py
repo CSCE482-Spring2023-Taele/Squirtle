@@ -2,38 +2,45 @@ import re
 
 # test cases
 # ((<>)Hancock, (<>)1983)
-# ((<>)Collins, (<>)Williams (<>)2019)
-# ((<>)Jenkyn et al., (<>)2020)
-# ((<>)Kingma and Ba, (<>)2014)
-# ((<>)Wu et al., (<>)2019a)
 # ((<>)Cohen et al., (<>)2010; (<>)Lin, (<>)2008; (<>)Schuemie et al., (<>)2004)
+# [1] [12] [123]
 
 # cases of "lastName (2018)" should not be classified
 def classify_citations(text: str) -> str:
-    # print(text)
+    print(text)
     citation_indexes = [m.start() for m in re.finditer('\(<>\)', text)]
     starting_index = -1
     ending_index = -1
     text_length = len(text)
     citations = []
-    for citation_index in citation_indexes:
-        # if a ( precedes the marker, we find the start of a citation
-        if text[citation_index - 1] == '(':
-            starting_index = citation_index - 1
-        # else if ####) comes after the citation, we find the end of a citation
-        if (citation_index + 9) <= text_length:
-            if text[citation_index + 4 + 4] == ')': # index covers 4 for (<>) and 4 for the year
-                ending_index = citation_index + 4 + 5 # take the index after the ending )
-                if (ending_index - starting_index) <= 150: # if the found citation itself is less than 150 characters
-                    citations.append(text[starting_index - 1: ending_index])
-                    starting_index = -1
-                    ending_index = -1
+    if len(citation_indexes) != 0:
+        for citation_index in citation_indexes:
+            # if a ( precedes the marker, we find the start of a citation
+            if text[citation_index - 1] == '(':
+                starting_index = citation_index - 1
+            # else if ####) comes after the citation, we find the end of a citation
+            if (citation_index + 9) <= text_length:
+                if text[citation_index + 4 + 4] == ')': # index covers 4 for (<>) and 4 for the year
+                    ending_index = citation_index + 4 + 5 # take the index after the ending )
+                    if (ending_index - starting_index) <= 150: # if the found citation itself is less than 150 characters
+                        citations.append(text[starting_index - 1: ending_index])
+                        starting_index = -1
+                        ending_index = -1
     citations = list(set(citations))
     for citation in citations:
-        normalized_citation = '<!--' + citation + '-->'
-        text = text.replace(citation, normalized_citation)
-    print(len(citations))
-    print(text)
+        # normalized_citation = '<!--' + citation + '-->'
+        text = text.replace(citation, '')
+    bracket_citations = []
+    bracket_citation_indexes = [m.start() for m in re.finditer('\[\d\]', text)] + [m.start() for m in re.finditer('\[\d\d\]', text)] + [m.start() for m in re.finditer('\[\d\d\d\]', text)]
+    if len(bracket_citation_indexes) != 0:
+        for bracket_citation_index in bracket_citation_indexes:
+            ending_bracket = text[bracket_citation_index:].find(']')
+            if ending_bracket <= bracket_citation_index + 5:
+                bracket_citations.append(text[bracket_citation_index: bracket_citation_index + ending_bracket + 1])
+    bracket_citations = list(set(bracket_citations))
+    if len(bracket_citations) != 0:
+        for bracket_citation in bracket_citations:
+            text = text.replace(bracket_citation, '')
     return text
          
 if __name__ == "__main__":
@@ -126,5 +133,6 @@ if __name__ == "__main__":
     </div></body>
     </html>
     '''
+    text = '[1] brife [32] bhrfb[3]fds'
     html_output = classify_citations(text)
     # classify_citations("Here is an example sentence here((<>) with(<>) a) couple citations ((<>)Cohen et al., (<>)2010; (<>)Lin, (<>)2008; (<>)Schuemie et al., (<>)2004). Another fact came from there ((<>)Hancock, (<>)1983).")
