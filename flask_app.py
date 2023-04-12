@@ -1,4 +1,4 @@
-from flask import Flask, render_template, json, jsonify, render_template_string, session
+from flask import Flask, render_template, json, jsonify, render_template_string, session, redirect, url_for, flash
 from flask_wtf import FlaskForm
 from flask_socketio import SocketIO
 from wtforms import FileField, SubmitField, BooleanField
@@ -20,16 +20,19 @@ app = Flask(__name__)
 socketio = SocketIO(app)
 app.config['SECRET_KEY'] = 'supersecretkey'
 
+def clean_resources():
+    dir = session['UPLOAD_FOLDER']
+    print('Clearing Resources at ', dir)
+    shutil.rmtree(dir)
+    session.pop('UPLOAD_FOLDER', None)
+
 @socketio.on('connect')
 def test_connect():
     print('Client connected')
 
 @socketio.on('disconnect')
 def test_disconnect():
-    dir = session['UPLOAD_FOLDER']
-    print('Clearing Resources at ', dir)
-    shutil.rmtree(dir)
-    session.pop('UPLOAD_FOLDER', None)
+    clean_resources()
     print('Client disconnected')
 
 
@@ -44,6 +47,7 @@ class UploadFileForm(FlaskForm):
 def home():
     form = UploadFileForm()
     if form.validate_on_submit():
+        error = ''
         secretStr = secrets.token_hex(16)
         app.config['UPLOAD_FOLDER'] = 'static/' + secretStr
         session['UPLOAD_FOLDER'] = os.getcwd() + '/' + app.config['UPLOAD_FOLDER']
@@ -52,27 +56,41 @@ def home():
 
         sonify_images = form.sonify_images_toggle.data
 
-        buf_stream = io.BufferedReader(file)
-        extract = ExtractAPI(file.filename, buf_stream)
-        result_zip = extract.adobe_extract()
+        try:
+            buf_stream = io.BufferedReader(file)
+            extract = ExtractAPI(file.filename, buf_stream)
+            result_zip = extract.adobe_extract()
 
-        with zipfile.ZipFile(result_zip, 'r') as zip_ref:
-            zip_ref.extractall(app.config['UPLOAD_FOLDER'])
-        zip_ref.close()
+            with zipfile.ZipFile(result_zip, 'r') as zip_ref:
+                zip_ref.extractall(app.config['UPLOAD_FOLDER'])
+            zip_ref.close()
 
-        os.remove(result_zip)
-
+            os.remove(result_zip)
+        except Exception:
+            error = 'Failed to extract from PDF. Please try again.'
+            return render_template('index.html', form=form, error=error)
+        
         if sonify_images:
             if os.path.exists(app.config['UPLOAD_FOLDER'] + '/figures'):
-                sonify = Sonify(app.config['UPLOAD_FOLDER'])
-                sonify.sonifyPDFImages()
+                try:
+                    sonify = Sonify(app.config['UPLOAD_FOLDER'])
+                    sonify.sonifyPDFImages()
+                except Exception:
+                    error = 'Failed to sonify images. Please try again.'
+                    clean_resources()
+                    return render_template('index.html', form=form, error=error)
 
-        jsonobj = jsontohtml(app.config['UPLOAD_FOLDER'], remove_citations, sonify_images)
-        html = jsonobj.json2html()
+        try:
+            jsonobj = jsontohtml(app.config['UPLOAD_FOLDER'], remove_citations, sonify_images)
+            html = jsonobj.json2html()
+        except Exception:
+            error = 'Failed to generate HTML. Please try again.'
+            clean_resources()
+            return render_template('index.html', form=form, error=error)
 
         return render_template_string(html)
 
-    return render_template('index.html', form=form)
+    return render_template('index.html', form=form, error='')
 
 if __name__ == '__main__':
     socketio.run(app)

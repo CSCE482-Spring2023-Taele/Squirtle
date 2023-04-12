@@ -8,6 +8,9 @@
 </head>
 <body>
     <h1>PDF Max</h1>
+    {% if error != '' %}
+        <div>{{error}}</div>
+    {% endif %}
     <form method='POST' enctype='multipart/form-data'>
         {{form.hidden_tag()}}
         {{form.file()}}
