@@ -5,21 +5,96 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
+    <style>
+        @import url(https://fonts.googleapis.com/css2?family=Noto+Serif&family=Roboto:wght@300;400&family=VT323&display=swap);
+        @import url(https://fonts.googleapis.com/css2?family=Courgette&family=Space+Grotesk:wght@300;400&display=swap);
+        html {
+            font-family: "Noto Serif", serif;
+        }
+        br {
+          display: block;
+          margin: 4% 0;
+          content: "";
+        }
+        h1,h2 {
+          color: #11223d;
+        }
+        p {
+          font-size: 1.5rem;
+        }
+        h2 {
+          font-size: 2rem;
+        }
+        hr {
+          color: #11223d;
+          height: 0.15%;
+          background-color: #11223d;
+          width: 100%;
+        }
+        .app_header {
+          background: #11223d;
+          padding: 12px 16px;
+          position: fixed;
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
+          z-index: 10;
+        }
+        .button {
+          line-height: 20px;
+          padding: 6px 12px;
+          text-decoration: none;
+          border: 1px solid #9ac2ff;
+          color: #9ac2ff;
+          display: block;
+          border-radius: 4px;
+          margin-left: 12px;
+          font-size: 1.1rem;
+          white-space: nowrap;
+          transition: all .25s ease-out;
+        }
+        body {
+          margin: 0;
+        }
+        .app_navigation {
+          display: flex;
+          align-items: center;
+        }
+    </style>
 </head>
-<body>
-    <h1>PDF Max</h1>
-    {% if error != '' %}
-        <div>{{error}}</div>
-    {% endif %}
-    <form method='POST' enctype='multipart/form-data'>
-        {{form.hidden_tag()}}
-        {{form.file()}}
-        {{form.remove_citations_toggle()}}
-        {{form.remove_citations_toggle.label}}
-        {{form.sonify_images_toggle()}}
-        {{form.sonify_images_toggle.label}}
-        {{''.join(form.file.errors)}}
-        {{form.submit()}}
-    </form>
+<body style="text-align: center;">
+    <header class="app_header">
+        <div>
+            <a href="/" class="button">Home</a>
+        </div>
+        <div style="font-size: 2rem; color: white; font-family: 'Courgette', cursive;">pdf max</div>
+        <img src="https://cdn.discordapp.com/attachments/933852328409313280/1093286323592368228/512px-Accessibility.svg.png" style="width: 2.5%; margin-right: 2.5%;"/>
+    </header>
+    <div style="padding-top: 7%; text-align: center; width: 45%; margin: auto;">
+        {% if error != '' %}
+            <div>{{error}}</div>
+        {% endif %}
+        <div style="font-size: 5rem; color: #264653"><span><img style="width: 7%; padding-right: 1%;" src="https://cdn.discordapp.com/attachments/933852328409313280/1093286323592368228/512px-Accessibility.svg.png"/></span>Pdf Max</div>
+        <div style="text-align: justify; font-size: 1.5rem; font-family: Roboto, sans-serif; font-weight: 300;">
+            Pdf Max is an experimental prototype that aims to render scientific papers in HTML so they can be more easily read by screen readers or on mobile devices. Because of our reliance on statistical machine learning techniques, some errors are inevitable. We are continuing to improve upon our methods to correctly and efficiently extract metadata from PDFs. To use, upload a scientific paper below, or view a gallery of example papers. More information can be found on our tutorial and about pages.
+            </br>
+            Feedback and feature requests, or interested in collaborating? Please fill out our <a href="bruh.com">feedback survey</a> or email <a href="accessibility@pdfmax.com">accessibility@pdfmax.com</a>
+        </div>
+        <form style = "margin-top: 6%; text-align: left;" method='POST' enctype='multipart/form-data'>
+            <label style="font-family: Roboto, sans-serif; font-size: 1.2rem;">
+                Select a paper and click Upload File
+                <span style="font-weight: 300; display: block; font-size: 1.1rem;">accepts PDF files (*.pdf) - LaTeX source (*.gz, *.tar) & JATS XML (*.nxml) coming soon</span>
+                <span style="font-weight: 300; display: block; font-size: 1.1rem; padding-bottom: 2%;">takes 2-3 minutes to process; please leave the tab open and check back later</span>
+            </label>
+            {{form.hidden_tag()}}
+            {{form.file()}}
+            {{form.remove_citations_toggle()}}
+            {{form.remove_citations_toggle.label}}
+            {{form.sonify_images_toggle()}}
+            {{form.sonify_images_toggle.label}}
+            {{''.join(form.file.errors)}}
+            {{form.submit()}}
+        </form>
+    </div>
 </body>
 </html>
