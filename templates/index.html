@@ -71,6 +71,9 @@
         <img src="https://cdn.discordapp.com/attachments/933852328409313280/1093286323592368228/512px-Accessibility.svg.png" style="width: 2.5%; margin-right: 2.5%;"/>
     </header>
     <div style="padding-top: 7%; text-align: center; width: 45%; margin: auto;">
+        {% if error != '' %}
+            <div>{{error}}</div>
+        {% endif %}
         <div style="font-size: 5rem; color: #264653"><span><img style="width: 7%; padding-right: 1%;" src="https://cdn.discordapp.com/attachments/933852328409313280/1093286323592368228/512px-Accessibility.svg.png"/></span>Pdf Max</div>
         <div style="text-align: justify; font-size: 1.5rem; font-family: Roboto, sans-serif; font-weight: 300;">
             Pdf Max is an experimental prototype that aims to render scientific papers in HTML so they can be more easily read by screen readers or on mobile devices. Because of our reliance on statistical machine learning techniques, some errors are inevitable. We are continuing to improve upon our methods to correctly and efficiently extract metadata from PDFs. To use, upload a scientific paper below, or view a gallery of example papers. More information can be found on our tutorial and about pages.
@@ -87,6 +90,9 @@
             {{form.file()}}
             {{form.remove_citations_toggle()}}
             {{form.remove_citations_toggle.label}}
+            {{form.sonify_images_toggle()}}
+            {{form.sonify_images_toggle.label}}
+            {{''.join(form.file.errors)}}
             {{form.submit()}}
         </form>
     </div>
