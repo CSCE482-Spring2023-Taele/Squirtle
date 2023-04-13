@@ -28,7 +28,10 @@ class jsontohtml:
                     section = pdf["elements"][i]["Text"]
                     section = section[:-1]
                 if pdf["elements"][i]["Path"].find("Document/P") != -1:
-                    structured[section] = structured.get(section, "") + pdf["elements"][i]["Text"] + "<br><br>"
+                    if not pdf["elements"][i]["Text"].endswith(". "):
+                        structured[section] = structured.get(section, "") + pdf["elements"][i]["Text"]
+                    else:   
+                        structured[section] = structured.get(section, "") + pdf["elements"][i]["Text"] + "<br><br>"
                 if pdf["elements"][i]["Path"].find("Document/Title") != -1:
                     section = pdf["elements"][i]["Text"]
                     structured[section] = ""
@@ -93,10 +96,9 @@ class jsontohtml:
             return html.replace("(<>)","")
         return self.classify_citations(html)
     
-    def classify_citations(text: str) -> str:
+    def classify_citations(self,text):
         import re
         from eyecite import get_citations
-        print('Removing Citations')
         citation_indexes = [m.start() for m in re.finditer('\(<>\)', text)]
         starting_index = -1
         ending_index = -1
