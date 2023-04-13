@@ -46,8 +46,8 @@ class UploadFileForm(FlaskForm):
 @app.route('/home', methods=['GET',"POST"])                
 def home():
     form = UploadFileForm()
+    error = ''
     if form.validate_on_submit():
-        error = ''
         secretStr = secrets.token_hex(16)
         app.config['UPLOAD_FOLDER'] = 'static/' + secretStr
         session['UPLOAD_FOLDER'] = os.getcwd() + '/' + app.config['UPLOAD_FOLDER']
