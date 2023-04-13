@@ -2,6 +2,7 @@ import re
 import json
 from prettytable import PrettyTable
 from xlsx2html import xlsx2html
+from eyecite import get_citations
 
 class jsontohtml:
     def __init__(self, foldername, remove_citations, sonify_images):
@@ -93,9 +94,7 @@ class jsontohtml:
             return html.replace("(<>)","")
         return self.classify_citations(html)
     
-    def classify_citations(text: str) -> str:
-        import re
-        from eyecite import get_citations
+    def classify_citations(self,text):
         print('Removing Citations')
         citation_indexes = [m.start() for m in re.finditer('\(<>\)', text)]
         starting_index = -1
