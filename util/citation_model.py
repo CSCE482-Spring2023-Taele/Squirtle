@@ -1,4 +1,5 @@
 import re
+from eyecite import get_citations
 
 # test cases
 # ((<>)Hancock, (<>)1983)
@@ -41,6 +42,16 @@ def classify_citations(text: str) -> str:
     if len(bracket_citations) != 0:
         for bracket_citation in bracket_citations:
             text = text.replace(bracket_citation, '')
+    text = text.replace('(<>)', '')
+    legal_citation_indexes = get_citations(text)
+    legal_citations = []
+    if len(legal_citation_indexes) != 0:
+        for legal_citation_index in legal_citation_indexes:
+            citation_span = legal_citation_index.full_span()
+            legal_citations.append(text[citation_span[0] : citation_span[1]])
+    if len(legal_citations) != 0:
+        for legal_citation in legal_citations:
+            text = text.replace(legal_citation, '')
     return text
          
 if __name__ == "__main__":
@@ -133,6 +144,12 @@ if __name__ == "__main__":
     </div></body>
     </html>
     '''
-    text = '[1] brife [32] bhrfb[3]fds'
-    html_output = classify_citations(text)
+    text = '[1] brife [32] bhrfb[3]fds(<>)'
+    text = """
+    Some of the law cases may reference this case a lot and it is called Mass. Gen. Laws ch. 1, § 2 (West 1999) (barring ...) even though this this that
+    Foo v. Bar, 1 U.S. 2, 3-4 (1999) (overruling ...).
+    Id. at 3.
+    Foo, supra, at 5.
+    """
+    print(classify_citations(text))
     # classify_citations("Here is an example sentence here((<>) with(<>) a) couple citations ((<>)Cohen et al., (<>)2010; (<>)Lin, (<>)2008; (<>)Schuemie et al., (<>)2004). Another fact came from there ((<>)Hancock, (<>)1983).")
