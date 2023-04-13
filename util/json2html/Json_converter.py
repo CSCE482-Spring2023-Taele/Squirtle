@@ -93,8 +93,9 @@ class jsontohtml:
             return html.replace("(<>)","")
         return self.classify_citations(html)
     
-
-    def classify_citations(self,text):
+    def classify_citations(text: str) -> str:
+        import re
+        from eyecite import get_citations
         print('Removing Citations')
         citation_indexes = [m.start() for m in re.finditer('\(<>\)', text)]
         starting_index = -1
@@ -129,4 +130,14 @@ class jsontohtml:
         if len(bracket_citations) != 0:
             for bracket_citation in bracket_citations:
                 text = text.replace(bracket_citation, '')
+        text = text.replace('(<>)', '')
+        legal_citation_indexes = get_citations(text)
+        legal_citations = []
+        if len(legal_citation_indexes) != 0:
+            for legal_citation_index in legal_citation_indexes:
+                citation_span = legal_citation_index.full_span()
+                legal_citations.append(text[citation_span[0] : citation_span[1]])
+        if len(legal_citations) != 0:
+            for legal_citation in legal_citations:
+                text = text.replace(legal_citation, '')
         return text
