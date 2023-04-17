@@ -6,4 +6,19 @@ entrypoint: gunicorn -w 1 --threads 100 flask_app:app
 runtime_config:
   operating_system: ubuntu22
 
+manual_scaling:
+  instances: 1
+resources:
+  cpu: 4
+  memory_gb: 4.0
+  disk_size_gb: 20
 
+
+handlers:
+- url: /(.+\.(png|wav))
+  static_files: \1
+  upload: (.+\.(png|wav))
+  http_headers:
+    # Allow cross-origin access to web fonts and images
+    # You can also replace "*" with a specific host, e.g. https://example.org
+    Access-Control-Allow-Origin: "*"
