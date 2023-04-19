@@ -27,7 +27,7 @@ class jsontohtml:
                 if pdf["elements"][i]["Path"].find("Document/H") != -1:
                     section = pdf["elements"][i]["Text"]
                     section = section[:-1]
-                if pdf["elements"][i]["Path"].find("Document/P") != -1:
+                if pdf["elements"][i]["Path"].find("/P") != -1 and pdf["elements"][i]["Path"].find("Table") == -1:
                     if not pdf["elements"][i]["Text"].endswith(". "):
                         structured[section] = structured.get(section, "") + pdf["elements"][i]["Text"]
                     else:   
