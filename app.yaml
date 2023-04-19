@@ -1,7 +1,7 @@
 runtime: python
 env: flex
 
-entrypoint: gunicorn -w 9 flask_app:app
+entrypoint: gunicorn -w 9 --threads 10 flask_app:app
 
 runtime_config:
   operating_system: ubuntu22
