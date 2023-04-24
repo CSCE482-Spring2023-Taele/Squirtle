@@ -56,9 +56,16 @@ class jsontohtml:
             });
         </script>
         <title>Output HTML File</title>
-        <link rel="preconnect" href="https://fonts.googleapis.com/%22%3E/n<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>\n<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">\n<style>\n@import url(https://fonts.googleapis.com/css2?family=Noto+Serif&family=Roboto:wght@300;400&family=VT323&display=swap);\nhtml {\nfont-family: "Noto Serif", serif;\n}\nbr {\ndisplay: block;\nmargin: 4% 0;\ncontent: "";\n}\na {\ncolor: #1857b6;\ntransition: color .25s ease-out;\nfont-size: 1.15rem;\n}\na:hover {\ncolor: #11223d;\ntext-decoration: none\n}\nh1,h2 {\ncolor: #11223d;\n}\np {\nfont-size: 1.5rem;\n}\nh2 {\nfont-size: 2rem;\n}\nhr {\ncolor: #11223d;\nheight: 0.15%;\nbackground-color: #11223d;\nwidth: 100%;\n}\n</style>
+        <link rel="preconnect" href="https://fonts.googleapis.com/%22%3E/n<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin> <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet"> <style> @import url(https://fonts.googleapis.com/css2?family=Noto+Serif&family=Roboto:wght@300;400&family=VT323&display=swap); @import url(https://fonts.googleapis.com/css2?family=Courgette&family=Space+Grotesk:wght@300;400&display=swap); html { font-family: "Noto Serif", serif; } br { display: block; margin: 4% 0; content: ""; } a { color: #1857b6; transition: color .25s ease-out; font-size: 1.15rem; } a:hover { color: #11223d; text-decoration: none } h1,h2 { color: #11223d; } p { font-size: 1.5rem; } h2 { font-size: 2rem; } hr { color: #11223d; height: 0.15%; background-color: #11223d; width: 100%; } .app_header { background: #11223d; padding: 12px 16px; position: fixed; width: 100%; display: flex; justify-content: space-between; z-index: 10; } .button { line-height: 20px; padding: 6px 12px; text-decoration: none; border: 1px solid #9ac2ff; color: #9ac2ff; display: block; border-radius: 4px; margin-left: 12px; font-size: 1.1rem; white-space: nowrap; transition: all .25s ease-out; } </style>
         </head> 
-        <body style="display: flex;">
+        <body style="display: flex; margin: 0;">
+        <header class="app_header">
+            <div>
+                <a href="/" class="button">Home</a>
+            </div>
+            <div style="font-size: 2rem; color: white; font-family: 'Courgette', cursive;">pdf max</div>
+            <img src="https://cdn.discordapp.com/attachments/933852328409313280/1093286323592368228/512px-Accessibility.svg.png" style="width: 2.5%; margin-right: 2.5%;"/>
+        </header>
         <div style="min-width: 15%; max-width: 15%; margin: 0 2%; overflow: auto;">
         <h1>Table of contents</h1>
         '''
