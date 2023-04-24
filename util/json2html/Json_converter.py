@@ -63,7 +63,7 @@ class jsontohtml:
             <div>
                 <a href="/" class="button">Home</a>
             </div>
-            <div style="font-size: 2rem; color: white; font-family: 'Courgette', cursive;">pdf max</div>
+            <div style="font-size: 2rem; color: white; font-family:'Noto Serif', cursive;">pdf max</div>
             <img src="https://cdn.discordapp.com/attachments/933852328409313280/1093286323592368228/512px-Accessibility.svg.png" style="width: 2.5%; margin-right: 2.5%;"/>
         </header>
         <div style="min-width: 15%; max-width: 15%; margin: 0 2%; overflow: auto;">

@@ -72,21 +72,21 @@
         <div style="font-size: 2rem; color: white; font-family: 'Courgette', cursive;">pdf max</div>
         <img src="https://cdn.discordapp.com/attachments/933852328409313280/1093286323592368228/512px-Accessibility.svg.png" style="width: 2.5%; margin-right: 2.5%;"/>
     </header>
-    <div style="padding-top: 7%; text-align: center; width: 45%; margin: auto;">
+    <div style="padding-top: 7%; text-align: center; width: 45%; margin: auto; ">
         {% if error != '' %}
         <div class="alert alert-danger" role="alert">{{error}}</div>
         {% endif %}
         {% if form.file.errors %}
         <div class="alert alert-danger" role="alert">{{''.join(form.file.errors)}}</div>
         {% endif %}
-        <div style="font-size: 5rem; color: #264653"><span><img style="width: 7%; padding-right: 1%;" src="https://cdn.discordapp.com/attachments/933852328409313280/1093286323592368228/512px-Accessibility.svg.png"/></span>Pdf Max</div>
-        <div style="text-align: justify; font-size: 1.5rem; font-family: Roboto, sans-serif; font-weight: 300;">
+        <div style="font-family: 'Noto Serif', Roboto, sans-serif; font-size: 5rem; color: #264653"><span><img style="width: 7%; padding-right: 1%;" src="https://cdn.discordapp.com/attachments/933852328409313280/1093286323592368228/512px-Accessibility.svg.png"/></span>Pdf Max</div>
+        <div style="text-align: justify; font-size: 1.5rem; font-family: 'Noto Serif', Roboto, sans-serif; font-weight: 300;">
             Pdf Max is an experimental prototype that aims to render scientific papers in HTML so they can be more easily read by screen readers or on mobile devices. Because of our reliance on statistical machine learning techniques, some errors are inevitable. We are continuing to improve upon our methods to correctly and efficiently extract metadata from PDFs. To use, upload a scientific paper below, or view a gallery of example papers. More information can be found on our tutorial and about pages.
             </br>
-            Feedback and feature requests, or interested in collaborating? Please fill out our <a href="bruh.com">feedback survey</a> or email <a href="accessibility@pdfmax.com">accessibility@pdfmax.com</a>
+            Feedback and feature requests, or interested in collaborating? Please fill out our <a href="https://forms.gle/r7ZQ8SH8AVVfAkbFA">feedback survey</a> or email <a href="mailto:accessibility@pdfmax.com">accessibility@pdfmax.com</a>
         </div>
         <form style = "margin-top: 6%; text-align: left;" method='POST' enctype='multipart/form-data'>
-            <label style="font-family: Roboto, sans-serif; font-size: 1.2rem;">
+            <label style="font-family: 'Noto Serif', Roboto, sans-serif; font-size: 1.2rem;">
                 Select a paper and click Upload File
                 <span style="font-weight: 300; display: block; font-size: 1.1rem;">accepts PDF files (*.pdf) - LaTeX source (*.gz, *.tar) & JATS XML (*.nxml) coming soon</span>
                 <span style="font-weight: 300; display: block; font-size: 1.1rem; padding-bottom: 2%;">takes 2-3 minutes to process; please leave the tab open and check back later</span>
