@@ -2,6 +2,7 @@ import re
 import json
 from prettytable import PrettyTable
 from xlsx2html import xlsx2html
+from eyecite import get_citations
 
 class jsontohtml:
     def __init__(self, foldername, remove_citations, sonify_images):
@@ -71,10 +72,11 @@ class jsontohtml:
             if i.find("figures/fileoutpart") != -1:
                 html = html + "<div id=\"" + i + "\">\n"
                 imagepath = self.directory + "/" + i
-                html = html + "<img src=\"" + imagepath + "\" alt=\"\" >\n"
+                #html = html + "<img src=\"" + "/" + imagepath + "\" alt=\"\" >\n"
+                html = html + "<img src=\"" + "{{url_for('static', filename = '" + imagepath[7:] + "')}}\"" + ">"
                 if self.sonify_flag:
                     soundpath = imagepath[:-3] + "wav"
-                    html = html + "<audio controls>\n" + "<source src=\"" + soundpath + "\" type=\"audio/wav\" >\n" + "</audio>"
+                    html = html + "<audio controls>\n" + "<source src=\"" + "{{url_for('static', filename = '" + soundpath[7:] + "')}}\"" + " type=\"audio/wav\" >\n" + "</audio>"
                 html = html + "</div>\n" + "<br>"
             elif i.find("tables/fileoutpart") != -1:
                 tablepath = self.directory + "/" + i
@@ -97,8 +99,7 @@ class jsontohtml:
         return self.classify_citations(html)
     
     def classify_citations(self,text):
-        import re
-        from eyecite import get_citations
+        print('Removing Citations')
         citation_indexes = [m.start() for m in re.finditer('\(<>\)', text)]
         starting_index = -1
         ending_index = -1

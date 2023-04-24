@@ -59,7 +59,7 @@ class Sonify:
             print("Min intensity: ", np.min(imgArr))
         return imgArr
 
-    def genSoundFromImage(self, file, output="sound.wav", duration=1.0, sampleRate=44100.0, intensityFactor=1, min_freq=0, max_freq=22000, invert=False, contrast=True, highpass=True, verbose=False):
+    def genSoundFromImage(self, file, output="sound.wav", duration=3.0, sampleRate=44100.0, intensityFactor=1, min_freq=0, max_freq=22000, invert=False, contrast=True, highpass=True, verbose=False):
         wavef = wave.open(output,'w')
         wavef.setnchannels(1) # mono
         wavef.setsampwidth(2) 
