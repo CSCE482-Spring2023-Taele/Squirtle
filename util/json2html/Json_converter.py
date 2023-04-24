@@ -66,14 +66,14 @@ class jsontohtml:
             <div style="font-size: 2rem; color: white; font-family:'Courgette', cursive;">pdf max</div>
             <img src="https://cdn.discordapp.com/attachments/933852328409313280/1093286323592368228/512px-Accessibility.svg.png" style="width: 2.5%; margin-right: 2.5%;"/>
         </header>
-        <div style="min-width: 15%; max-width: 15%; margin: 0 2%; overflow: auto;">
+        <div style="min-width: 15%; max-width: 15%; margin: 5% 2%; overflow: auto;">
         <h1>Table of contents</h1>
         '''
 
         for i in structured:
             if (i.find("figures/fileoutpart") == -1) and (i.find("tables/fileoutpart") == -1):
                 html = html + "<a href=\"#" + i + "\">" + i + "</a>\n <br>\n"
-        html = html + "</div>\n" + "<div style=\"overflow: auto; height: auto; border-left: solid; padding-left: 2%; padding-right: 2%\">"
+        html = html + "</div>\n" + "<div style=\"overflow: auto; height: auto; border-left: solid; padding: 5% 2%;\">"
 
         for i in structured:
             if i.find("figures/fileoutpart") != -1:
