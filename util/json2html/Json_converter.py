@@ -118,7 +118,7 @@ class jsontohtml:
                             citations.append(text[starting_index - 1: ending_index])
                             starting_index = -1
                             ending_index = -1
-        print('CITATION MODEL --- Number of (name year)-style citations found: ' + len(citations))
+        print('CITATION MODEL --- Number of (name year)-style citations found: ' + str(len(citations)))
         citations = list(set(citations))
         for citation in citations:
             # normalized_citation = '<!--' + citation + '-->'
@@ -130,7 +130,7 @@ class jsontohtml:
                 ending_bracket = text[bracket_citation_index:].find(']')
                 if ending_bracket <= bracket_citation_index + 5:
                     bracket_citations.append(text[bracket_citation_index: bracket_citation_index + ending_bracket + 1])
-        print('CITATION MODEL --- Number of [#]-style citations found: ' + len(bracket_citations))
+        print('CITATION MODEL --- Number of [#]-style citations found: ' + str(len(bracket_citations)))
         bracket_citations = list(set(bracket_citations))
         if len(bracket_citations) != 0:
             for bracket_citation in bracket_citations:
@@ -142,7 +142,7 @@ class jsontohtml:
             for legal_citation_index in legal_citation_indexes:
                 citation_span = legal_citation_index.full_span()
                 legal_citations.append(text[citation_span[0] : citation_span[1]])
-        print('CITATION MODEL --- Number of legal-style citations found: ' + len(legal_citations))
+        print('CITATION MODEL --- Number of legal-style citations found: ' + str(len(legal_citations)))
         legal_citations = list(set(legal_citations))
         if len(legal_citations) != 0:
             for legal_citation in legal_citations:
