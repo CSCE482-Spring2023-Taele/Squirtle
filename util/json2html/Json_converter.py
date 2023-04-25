@@ -5,11 +5,12 @@ from xlsx2html import xlsx2html
 from eyecite import get_citations
 
 class jsontohtml:
-    def __init__(self, foldername, remove_citations, sonify_images):
+    def __init__(self, foldername, remove_citations, sonify_images, secretStr):
         self.directory = foldername
         self.filename = foldername + "/structuredData.json"
         self.citation_flag = remove_citations
         self.sonify_flag = sonify_images
+        self.secretStr = secretStr
 
     def json2html(self):
         file = self.filename
@@ -78,12 +79,11 @@ class jsontohtml:
         for i in structured:
             if i.find("figures/fileoutpart") != -1:
                 html = html + "<div id=\"" + i + "\">\n"
-                imagepath = self.directory + "/" + i
-                #html = html + "<img src=\"" + "/" + imagepath + "\" alt=\"\" >\n"
-                html = html + "<img src=\"" + "{{url_for('static', filename = '" + imagepath[7:] + "')}}\"" + ">"
+                imagepath = self.secretStr + "/" + i
+                html = html + "<img src=\"" + "{{url_for('static', filename = '" + imagepath + "')}}\"" + ">"
                 if self.sonify_flag:
                     soundpath = imagepath[:-3] + "wav"
-                    html = html + "<audio controls>\n" + "<source src=\"" + "{{url_for('static', filename = '" + soundpath[7:] + "')}}\"" + " type=\"audio/wav\" >\n" + "</audio>"
+                    html = html + "<audio controls>\n" + "<source src=\"" + "{{url_for('static', filename = '" + soundpath + "')}}\"" + " type=\"audio/wav\" >\n" + "</audio>"
                 html = html + "</div>\n" + "<br>"
             elif i.find("tables/fileoutpart") != -1:
                 tablepath = self.directory + "/" + i

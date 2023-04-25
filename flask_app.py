@@ -13,8 +13,7 @@ from util.PDFServicesSDK.adobeAPI.src.extractpdf.extract_txt_table_info_with_fig
 from util.json2html.Json_converter import jsontohtml
 from util.soundscape import Sonify
 import secrets
-
-
+from pathlib import Path
 
 app = Flask(__name__)
 socketio = SocketIO(app)
@@ -49,8 +48,14 @@ def home():
     error = ''
     if form.validate_on_submit():
         secretStr = secrets.token_hex(16)
-        app.config['UPLOAD_FOLDER'] = 'static/' + secretStr
-        session['UPLOAD_FOLDER'] = os.getcwd() + '/' + app.config['UPLOAD_FOLDER']
+        THIS_FOLDER = Path(__file__).parent.resolve()
+         
+        # Path to static. Stores temporary img and sound files
+        rel_static =  '/static/' + secretStr
+        abs_static = str(THIS_FOLDER) + rel_static
+
+        session['UPLOAD_FOLDER'] = abs_static
+
         file = form.file.data
         remove_citations = form.remove_citations_toggle.data
 
@@ -62,7 +67,7 @@ def home():
             result_zip = extract.adobe_extract()
 
             with zipfile.ZipFile(result_zip, 'r') as zip_ref:
-                zip_ref.extractall(app.config['UPLOAD_FOLDER'])
+                zip_ref.extractall(abs_static)
             zip_ref.close()
 
             os.remove(result_zip)
@@ -71,9 +76,9 @@ def home():
             return render_template('index.html', form=form, error=error)
         
         if sonify_images:
-            if os.path.exists(app.config['UPLOAD_FOLDER'] + '/figures'):
+            if os.path.exists(abs_static + '/figures'):
                 try:
-                    sonify = Sonify(app.config['UPLOAD_FOLDER'])
+                    sonify = Sonify(abs_static)
                     sonify.sonifyPDFImages()
                 except Exception:
                     error = 'Failed to sonify images. Please try again.'
@@ -81,7 +86,8 @@ def home():
                     return render_template('index.html', form=form, error=error)
 
         try:
-            jsonobj = jsontohtml(app.config['UPLOAD_FOLDER'], remove_citations, sonify_images)
+            # secretStr is the  name of the temp folder where images and sound files are housed
+            jsonobj = jsontohtml(abs_static, remove_citations, sonify_images, secretStr)
             html = jsonobj.json2html()
         except Exception:
             error = 'Failed to generate HTML. Please try again.'
