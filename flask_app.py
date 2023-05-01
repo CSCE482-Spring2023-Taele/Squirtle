@@ -18,6 +18,7 @@ from pathlib import Path
 app = Flask(__name__)
 socketio = SocketIO(app)
 app.config['SECRET_KEY'] = 'supersecretkey'
+app.debug = False
 
 def clean_resources():
     dir = session['UPLOAD_FOLDER']
