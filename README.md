@@ -35,18 +35,37 @@ PDFMax is a solution offering an accessible reading experience for PDF users. Ta
 
 ## Server-Side Processes
 
-### PDF Extraction Agent
+### [PDF Extraction Agent](https://github.com/CSCE482-Spring2023-Taele/Squirtle/blob/master/util/PDFServicesSDK/adobeAPI/src/extractpdf/extract_txt_table_info_with_figure_tables_rendition_from_pdf.py)
 
 This tool is responsible for extrating text, images, and tables from PDf files. As the first step in our processing pipeline, this process generates the JSON, PNG, and CSV files that are used later down the pipeline. The tool relies on a PDF parser and an Optical Character Recognition (OCR) library. When a user uploads text-based PDFs, the process defaults to the parser to extract information. This maximizes content accuracy. When the PDF is image-based/scanned the process opts for OCR. This helps ensure the app covers all types of PDFs.
+
+### Class [`ExtractAPI`](https://github.com/CSCE482-Spring2023-Taele/Squirtle/blob/master/util/PDFServicesSDK/adobeAPI/src/extractpdf/extract_txt_table_info_with_figure_tables_rendition_from_pdf.py#L28)
+
+**Attributes**
+`file_name : string` Link to user uploaded PDF. 
+`buf_stream : BufferedReader` Uploaded file passed as a buffer [Python Doc](https://docs.python.org/3/library/io.html#io.BufferedReader).
+  
+**Functions**
+`def adobe_extract(self)` Responsible for handing pdf extraction using adobe's API in the process.
 
 #### Request
 - GET - Request containing uploaded file and credentials.
 #### Response
 - 200 - Success. Returns content extracted from PDF in form of JSON, PNGs, and CSVs.
 - 400 - Failure. Internal processing error or expired credentials.
+
 ### Image Sonification Model
 
 This is an optional stage in our processing pipeline. If selected by the user, this step is responsible for generating sound files for the images present in a PDF. The tool uses fourier transformations to convert each pixel in an image to a sound wave. The result is a sound file that offers insights regarding the image. This tool is specifically designed to help blind users consume image content through sound.
+
+### Class [`Sonify`](https://github.com/CSCE482-Spring2023-Taele/Squirtle/blob/master/util/soundscape.py#L8)
+
+**Attributes**
+`input_dir : string` Link to storage directory for client. 
+`output_dir : string` Link to output directory for client.
+
+**Functions**
+`def genSoundFromImage(self, file, output="sound.wav"):` Responsible for creating sound file for image files passed in.
 
 #### Request
 - PUT - Request containing path to .PNGs extracted.
@@ -57,6 +76,18 @@ This is an optional stage in our processing pipeline. If selected by the user, t
 
 This is an optional stage in our processing pipeline. If selected by the user, this model finds and removed in-text citations from text. This results in a smoother reading experience for users with screen-readers. Currently this model classifies and tags MLA, IEEE, and Legal citations.
 
+### Class [`jsontohtml`](https://github.com/CSCE482-Spring2023-Taele/Squirtle/blob/master/util/json2html/Json_converter.py#L7)
+
+**Attributes**
+`directory : string` Link to storage directory for client. 
+`filename : string` Link to JSON file extracted for client. 
+`citation_flag : boolean` Capture state of citation removal toggle. 
+`sonify_flag : boolean` Capture state of image sonification toggle. 
+`secret_srt : string` Hash to uniquely identify the client. 
+
+**Functions**
+`def classify_citations(self,text)` Removes in-text citations. Called regularly by `json2html()` if `citation_flag=True`
+
 #### Request
 - UPDATE - Request containing extracted JSON.
 #### Response
@@ -65,6 +96,18 @@ This is an optional stage in our processing pipeline. If selected by the user, t
 ### HTML Generation Model
 
 This is the final stage in our processing pipeline. Given the processed content (JSON, .PNGs, .CSVs, .WAVs) this model generates a fully accessible HTML file. This model preserves a 100% of the PDF content and a 100% of the content flow. The priority during this stage is to make the HTML fully compatible and navigable through a screen-reader.
+
+### Class [`jsontohtml`](https://github.com/CSCE482-Spring2023-Taele/Squirtle/blob/master/util/json2html/Json_converter.py#L7)
+
+**Attributes**
+`directory : string` Link to storage directory for client. 
+`filename : string` Link to JSON file extracted for client. 
+`citation_flag : boolean` Capture state of citation removal toggle. 
+`sonify_flag : boolean` Capture state of image sonification toggle. 
+`secret_srt : string` Hash to uniquely identify the client. 
+
+**Functions**
+`def json2html(self)` Consolidates JSON, PNG, WAV, and CSV to build HTML.
 
 #### Request
 - GET - Request containing path to the extracted PDF content
